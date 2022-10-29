@@ -7,12 +7,12 @@ from radish import given, then, when, step
 from radish import world
 
 
-@given("I start the chromium browser")
+@given("I start the browser")
 def i_start_the_browser(step):
     desired = DesiredCapabilities.CHROME
     world.webdriver = webdriver.Chrome(
-            desired_capabilities=desired,
-            options=world.chrome_options())
+        desired_capabilities=desired,
+        options=world.chrome_options())
 
 
 @step("I close the browser")
