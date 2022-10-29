@@ -13,7 +13,7 @@ class Control():
         if cssclass:
             filter.append(f"contains(@class, '{cssclass}')")
         if text:
-            filter.append(f"contains(text(), '{text}')")
+            filter.append(f"contains(., '{text}')")
         if len(filter) > 0:
             filterstr = f'[{" and ".join(filter)}]'
         self.xpath = f"//{tag}{filterstr}"
