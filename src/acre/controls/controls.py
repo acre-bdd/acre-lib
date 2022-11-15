@@ -30,6 +30,11 @@ class Control():
         self.match.click()
 
 
+class Title(Control):
+    def __init__(self, id=None, cssclass=None, text=None):
+        super().__init__(tag='h1', id=id, cssclass=cssclass, text=text)
+
+
 class Input(Control):
     def __init__(self, id=None, cssclass=None, text=None):
         super().__init__(tag='input', id=id, cssclass=cssclass, text=text)
