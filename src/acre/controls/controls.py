@@ -4,17 +4,15 @@ from radish import world
 
 
 class Control():
-    def __init__(self, tag="*", id=None, cssclass=None, text=None, **kwargs):
+    def __init__(self, tag="*", **kwargs):
         filter = []
         filterstr = ""
 
-        if id:
-            filter.append(f"contains(@id, '{id}')")
-        if cssclass:
-            filter.append(f"contains(@class, '{cssclass}')")
-        if text:
-            filter.append(f"contains(., '{text}')")
         for name, value in kwargs.items():
+            if name.startswith('_'):
+                name = name[1:]
+            if name == 'text':
+                name = "."
             name = name.replace("_", "-")
             filter.append(f"contains(@{name}, '{value}')")
         if len(filter) > 0:
@@ -43,15 +41,15 @@ class Control():
 
 
 class Title(Control):
-    def __init__(self, id=None, cssclass=None, text=None):
-        super().__init__(tag='h1', id=id, cssclass=cssclass, text=text)
+    def __init__(self, **kwargs):
+        super().__init__(tag='h1')
 
 
 class Input(Control):
-    def __init__(self, id=None, cssclass=None, placeholder=None, **kwargs):
-        super().__init__(tag='input', id=id, cssclass=cssclass, placeholder=placeholder, **kwargs)
+    def __init__(self, **kwargs):
+        super().__init__(tag='input', **kwargs)
 
 
 class Link(Control):
-    def __init__(self, id=None, cssclass=None, text=None):
-        super().__init__(tag='a', id=id, cssclass=cssclass, text=text)
+    def __init__(self, **kwargs):
+        super().__init__(tag='a')
