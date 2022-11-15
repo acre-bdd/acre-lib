@@ -59,6 +59,11 @@ class Link(Control):
         super().__init__(tag='a', **kwargs)
 
 
+class Div(Control):
+    def __init__(self, **kwargs):
+        super().__init__(tag="div", **kwargs)
+
+
 class Button(Control):
     def __init__(self, **kwargs):
         super().__init__(tag="button", **kwargs)
