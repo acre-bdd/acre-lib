@@ -15,6 +15,7 @@ class Control():
         if text:
             filter.append(f"contains(., '{text}')")
         for name, value in kwargs:
+            name = name.replace("_", "-")
             filter.append(f"contains(@{name}, '{value}')")
         if len(filter) > 0:
             filterstr = f'[{" and ".join(filter)}]'
@@ -47,8 +48,8 @@ class Title(Control):
 
 
 class Input(Control):
-    def __init__(self, id=None, cssclass=None, text=None):
-        super().__init__(tag='input', id=id, cssclass=cssclass, text=text)
+    def __init__(self, id=None, cssclass=None, placeholder=None):
+        super().__init__(tag='input', id=id, cssclass=cssclass, placeholder=placeholder)
 
 
 class Link(Control):
