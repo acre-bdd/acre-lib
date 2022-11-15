@@ -28,7 +28,7 @@ class Control():
         self.timeout = timeout
         print(f"locating: {self.xpath}")
         print(f"locating: {self.xpath}")
-        print(f"locating: {self.xpath}")
+        logging.info(f"locating: {self.xpath}")
         self.match = world.webdriver.find_element(By.XPATH, self.xpath)
 
     def click(self):
@@ -56,7 +56,7 @@ class Input(Control):
 
 class Link(Control):
     def __init__(self, **kwargs):
-        super().__init__(tag='a')
+        super().__init__(tag='a', **kwargs)
 
 
 class Button(Control):
