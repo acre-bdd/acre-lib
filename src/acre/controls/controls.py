@@ -11,10 +11,9 @@ class Control():
         for name, value in kwargs.items():
             if name.startswith('_'):
                 name = name[1:]
-            if name == 'text':
-                name = "."
             name = name.replace("_", "-")
-            filter.append(f"contains(@{name}, '{value}')")
+            name = "." if name == 'text' else f"@{name}"
+            filter.append(f"contains({name}, '{value}')")
         if len(filter) > 0:
             filterstr = f'[{" and ".join(filter)}]'
         self.xpath = f"//{tag}{filterstr}"
