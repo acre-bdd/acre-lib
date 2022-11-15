@@ -4,7 +4,7 @@ from radish import world
 
 
 class Control():
-    def __init__(self, tag="*", id=None, cssclass=None, text=None):
+    def __init__(self, tag="*", id=None, cssclass=None, text=None, **kwargs):
         filter = []
         filterstr = ""
 
@@ -14,6 +14,8 @@ class Control():
             filter.append(f"contains(@class, '{cssclass}')")
         if text:
             filter.append(f"contains(., '{text}')")
+        for name, value in kwargs:
+            filter.append(f"contains(@{name}, '{value}')")
         if len(filter) > 0:
             filterstr = f'[{" and ".join(filter)}]'
         self.xpath = f"//{tag}{filterstr}"
