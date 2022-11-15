@@ -36,7 +36,7 @@ class Control():
 
     @timeout.setter
     def timeout(self, value):
-        world.driver.implicitly_wait(float(value))
+        world.webdriver.implicitly_wait(float(value))
 
 
 class Title(Control):
