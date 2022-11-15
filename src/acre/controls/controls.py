@@ -53,3 +53,8 @@ class Input(Control):
 class Link(Control):
     def __init__(self, **kwargs):
         super().__init__(tag='a')
+
+
+class Button(Control):
+    def __init__(self, **kwargs):
+        super().__init__(tag="button", **kwargs)
