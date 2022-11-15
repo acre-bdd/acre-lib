@@ -48,8 +48,8 @@ class Title(Control):
 
 
 class Input(Control):
-    def __init__(self, id=None, cssclass=None, placeholder=None):
-        super().__init__(tag='input', id=id, cssclass=cssclass, placeholder=placeholder)
+    def __init__(self, id=None, cssclass=None, placeholder=None, **kwargs):
+        super().__init__(tag='input', id=id, cssclass=cssclass, placeholder=placeholder, **kwargs)
 
 
 class Link(Control):
