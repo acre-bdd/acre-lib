@@ -22,12 +22,21 @@ class Control():
         self.locate()
         self.match.send_keys(text)
 
-    def locate(self):
+    def locate(self, timeout=30):
+        self.timeout = timeout
         self.match = world.webdriver.find_element(By.XPATH, self.xpath)
 
     def click(self):
         self.locate()
         self.match.click()
+
+    @property
+    def timeout(self):
+        return self._timeout
+
+    @timeout.setter
+    def timeout(self, value):
+        world.driver.implicitly_wait(float(value))
 
 
 class Title(Control):
