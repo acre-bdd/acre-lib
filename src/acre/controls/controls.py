@@ -1,3 +1,5 @@
+import logging
+
 from selenium.webdriver.common.by import By
 
 from radish import world
@@ -24,6 +26,9 @@ class Control():
 
     def locate(self, timeout=30):
         self.timeout = timeout
+        print(f"locating: {self.xpath}")
+        print(f"locating: {self.xpath}")
+        print(f"locating: {self.xpath}")
         self.match = world.webdriver.find_element(By.XPATH, self.xpath)
 
     def click(self):
