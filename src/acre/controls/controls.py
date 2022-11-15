@@ -14,7 +14,7 @@ class Control():
             filter.append(f"contains(@class, '{cssclass}')")
         if text:
             filter.append(f"contains(., '{text}')")
-        for name, value in kwargs:
+        for name, value in kwargs.items():
             name = name.replace("_", "-")
             filter.append(f"contains(@{name}, '{value}')")
         if len(filter) > 0:
