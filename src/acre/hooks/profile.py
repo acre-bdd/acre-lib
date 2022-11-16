@@ -7,12 +7,17 @@ from radish import before, world
 
 @before.all(order=10)
 def read_profile(features, marker):
-    if 'profile' not in world.config.user_data:
-        log.debug("no profile defined, no profile will be loaded")
-        return
-    profile = f"etc/profiles/{world.config.user_data['profile']}"
+    if 'profile' in world.config.user_data:
+        profilename = world.config.user_data['profile']
+    else:
+        log.debug("no profile defined, default profile will be loaded")
+        profilename = 'default'
+    profile = f"etc/profiles/{profilename}"
     if not os.path.isfile(profile):
-        log.warning(f"profile '{profile}' not found, profile not loaded")
+        if profilename == 'default':
+            log.debug("default profile not found, no profile is loaded")
+        else:
+            log.warning(f"profile '{profile}' not found, profile not loaded")
         return
     cfg = ConfigParser()
     cfg.read(profile)
