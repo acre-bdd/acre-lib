@@ -26,9 +26,7 @@ class Control():
 
     def locate(self, timeout=30):
         self.timeout = timeout
-        print(f"locating: {self.xpath}")
-        print(f"locating: {self.xpath}")
-        logging.info(f"locating: {self.xpath}")
+        logging.debug(f"locating: {self.xpath}")
         self.match = world.webdriver.find_element(By.XPATH, self.xpath)
 
     def click(self):
