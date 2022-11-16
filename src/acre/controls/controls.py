@@ -1,6 +1,7 @@
 import logging
 
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException
 
 from radish import world
 
@@ -28,10 +29,19 @@ class Control():
         self.timeout = timeout
         logging.debug(f"locating: {self.xpath}")
         self.match = world.webdriver.find_element(By.XPATH, self.xpath)
+        return self
+
+    def exists(self, timeout=1):
+        try:
+            self.locate(timeout)
+            return True
+        except NoSuchElementException:
+            return False
 
     def click(self):
         self.locate()
         self.match.click()
+        return self
 
     @property
     def timeout(self):
