@@ -5,21 +5,10 @@ from selenium.common.exceptions import NoSuchElementException
 
 from radish import world
 
-
 class Control():
-    def __init__(self, tag="*", **kwargs):
-        filter = []
-        filterstr = ""
+    def __init__(self, xpath=None):
+        self.xpath = xpath
 
-        for name, value in kwargs.items():
-            if name.startswith('_'):
-                name = name[1:]
-            name = name.replace("_", "-")
-            name = "." if name == 'text' else f"@{name}"
-            filter.append(f"contains({name}, '{value}')")
-        if len(filter) > 0:
-            filterstr = f'[{" and ".join(filter)}]'
-        self.xpath = f"//{tag}{filterstr}"
 
     def input(self, text):
         self.locate()
@@ -52,26 +41,43 @@ class Control():
         world.webdriver.implicitly_wait(float(value))
 
 
-class Title(Control):
+class SmartControl(Control):
+    def __init__(self, tag="*", **kwargs):
+
+        filter = []
+        filterstr = ""
+
+        for name, value in kwargs.items():
+            if name.startswith('_'):
+                name = name[1:]
+            name = name.replace("_", "-")
+            name = "." if name == 'text' else f"@{name}"
+            filter.append(f"contains({name}, '{value}')")
+        if len(filter) > 0:
+            filterstr = f'[{" and ".join(filter)}]'
+        super().__init__(f"//{tag}{filterstr}")
+
+
+class Title(SmartControl):
     def __init__(self, **kwargs):
         super().__init__(tag='h1')
 
 
-class Input(Control):
+class Input(SmartControl):
     def __init__(self, **kwargs):
         super().__init__(tag='input', **kwargs)
 
 
-class Link(Control):
+class Link(SmartControl):
     def __init__(self, **kwargs):
         super().__init__(tag='a', **kwargs)
 
 
-class Div(Control):
+class Div(SmartControl):
     def __init__(self, **kwargs):
         super().__init__(tag="div", **kwargs)
 
 
-class Button(Control):
+class Button(SmartControl):
     def __init__(self, **kwargs):
         super().__init__(tag="button", **kwargs)
