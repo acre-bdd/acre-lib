@@ -1,8 +1,8 @@
 import os
-import logging as log
 from configparser import ConfigParser
 
 from radish import before, world
+from acre import log
 
 
 @before.all(order=10)

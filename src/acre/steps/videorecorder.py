@@ -1,4 +1,3 @@
-import logging
 from datetime import datetime
 import os
 import time
@@ -7,9 +6,8 @@ from subprocess import call
 
 from radish import before, after, world
 from acre.tools import settings
+from acre import log
 
-
-log = logging.getLogger()
 
 CMD = 'videorecording'
 
@@ -49,7 +47,7 @@ class VideoRecorder:
 @before.each_feature
 def start_videorecording(feature):
     if not settings.VR:
-        log.debug("Videorecording disabled")
+        log.warning("Videorecording disabled")
         return
     fn = _feature2name(feature)
 #   print(feature.line)

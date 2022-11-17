@@ -1,14 +1,13 @@
-import logging
-
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 
 from radish import world
+from acre import log
+
 
 class Control():
     def __init__(self, xpath=None):
         self.xpath = xpath
-
 
     def input(self, text):
         self.locate()
@@ -16,7 +15,7 @@ class Control():
 
     def locate(self, timeout=30):
         self.timeout = timeout
-        logging.debug(f"locating: {self.xpath}")
+        log.debug(f"locating: {self.xpath}")
         self.match = world.webdriver.find_element(By.XPATH, self.xpath)
         return self
 
