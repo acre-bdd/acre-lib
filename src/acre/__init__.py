@@ -1,1 +1,1 @@
-from acre.log import log    # noqa: F401
+from acre.logging import log    # noqa: F401
