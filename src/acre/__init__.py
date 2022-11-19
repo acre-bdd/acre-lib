@@ -1,1 +1,3 @@
-from acre.logging import log    # noqa: F401
+# flake8: noqa: F401
+from acre.logging import log
+from acre.settings import settings

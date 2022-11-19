@@ -14,6 +14,10 @@ api = Api(organization=settings.DEVOPS_ORG,
 
 @after.all()
 def after_all(features, marker):
+    if not _validate_settings():
+        log.warning("devops access not configured, skipping devops update")
+        return
+
     for feature in features:
         ftid = _get_tid(feature.tags)
         for scenario in feature.scenarios:
@@ -56,3 +60,19 @@ def _get_tid(tags):
 
 def _boldify(step):
     return re.sub(r"^(Given|When|Then)(.*)", r"&lt;b&gt;\1&lt;/b&gt;\2", step)
+
+
+def _validate_settings():
+    required_settings = {
+        "org": settings.DEVOPS_ORG,
+        "project": settings.DEVOPS_PROJECT,
+        "user": settings.DEVOPS_USER,
+        "apikey": settings.DEVOPS_APIKEY,
+        "area": settings.DEVOPS_AREA
+    }
+
+    for (name, value) in required_settings.items():
+        if not value:
+            log.warning(f"setting DEVOPS_{name.upper()} not valid")
+            return False
+    return True
