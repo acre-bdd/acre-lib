@@ -12,7 +12,7 @@ def after_all(features, marker):
     for feature in features:
         tid = _get_tid(feature.tags)
         if tid:
-            tc = TestCase(id=tid, name=feature.sentence)
+            tc = TestCase(name=feature.sentence)
         else:
             tc = TestCase(name=feature.sentence)
         for scenario in feature.scenarios:
