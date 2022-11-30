@@ -14,19 +14,26 @@ class VideoRecorder:
         self.vr = None
 
     def start(self):
-        vrfile = os.path.join(settings.ARTIFACTS, f"{settings.TRID}-{world.tid}-video")
-        logfile = open(f"{vrfile}.log", "w")
-        cmd = f"ffmpeg -video_size {VideoRecorder.screensize} -i $DISPLAY {VideoRecorder.args} {vrfile}.mp4"
+        self.vrfile = os.path.join(settings.ARTIFACTS, f"{settings.TRID}-{world.tid}-video")
+        logfile = open(f"{self.vrfile}.log", "w")
+        cmd = f"ffmpeg -video_size {VideoRecorder.screensize} -i $DISPLAY {VideoRecorder.args} {self.vrfile}.mp4"
+        log.debug(f"vr: {cmd}")
         if self.vr:
             log.warning("video recording already running")
             return
-        log.debug(f"starting video recording to {vrfile}")
+        log.debug(f"starting video recording to {self.vrfile}")
         self.vr = subprocess.Popen(cmd, shell=True, stdout=logfile, stderr=logfile)
 
     def stop(self):
         log.debug(f"stopping video recording for {world.tid}")
+        if self.vr.returncode:
+            log.warning("videorecording terminated with exit code {self.vr.returncode}, check logfile:")
+            log.warning("{self.vrfile}.log")
         self.vr.terminate()
         self.vr.wait()
+        if self.vr.returncode:
+            log.warning("videorecording terminated with exit code {self.vr.returncode}, check logfile:")
+            log.warning("{self.logfile}.log")
         self.vr = None
 
 
