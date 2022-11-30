@@ -3,6 +3,7 @@ import logging
 from acre import log
 
 from radish import before, after, world
+from radish.tools import tid
 
 levelmap = {
     'debug': logging.DEBUG,
@@ -37,7 +38,8 @@ def setup_logging(features, marker):
 
 @before.each_feature
 def before_feature(feature):
-    log.info(f"started: {feature}")
+    world.tid = tid.tid_from_tags(feature.tags)
+    log.info(f"started: {feature} [{world.tid}]")
 
 
 @after.each_feature

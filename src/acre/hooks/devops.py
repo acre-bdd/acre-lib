@@ -4,6 +4,7 @@ from DevOpsAPI import Api, Step
 
 from radish import after
 from acre import log, settings
+from acre.tools import tid
 
 
 api = Api(organization=settings.DEVOPS_ORG,
@@ -19,13 +20,13 @@ def after_all(features, marker):
         return
 
     for feature in features:
-        ftid = _get_tid(feature.tags)
+        ftid = tid.tid_from_tags(feature.tags)
         for scenario in feature.scenarios:
-            stid = _get_tid(scenario.tags)
-            tid = _make_tid(ftid, stid)
+            stid = tid.tid_from_tags(scenario.tags)
+            rtid = _make_tid(ftid, stid)
             title = f"{tid}{scenario.sentence}"
             log.warning(f"Setting title to {title}")
-            ids = api.WorkItems.find({"System.Title": f"~{tid}"})
+            ids = api.WorkItems.find({"System.Title": f"~{rtid}"})
             if len(ids) > 0:
                 tc = api.TestCase.get(ids[0])
                 log.warning(f"Setting title to {title}")
@@ -48,14 +49,6 @@ def _make_tid(ftid, stid):
         tids[ftid] = tids[ftid] + 1 if ftid in tids else 1
         return f"{ftid}.{tids[ftid]} "
     return ""
-
-
-def _get_tid(tags):
-    for tag in tags:
-        if tag.name.startswith("tid:"):
-            return tag.name
-
-    return None
 
 
 def _boldify(step):
