@@ -8,7 +8,7 @@ from acre import log
 
 class VideoRecorder:
     screensize = "640x480"
-    args = "-y -pix_fmt yuv420p -codec:v libx264 -r 10 -crf 38 -preset ultrafast"
+    args = "-y -f concat -pix_fmt yuv420p -codec:v libx264 -r 10 -crf 38 -preset ultrafast"
 
     def __init__(self):
         self.vr = None
@@ -22,7 +22,7 @@ class VideoRecorder:
         if self.vr:
             log.warning("video recording already running")
             return
-        log.debug(f"starting video recording to {self.vrfile}")
+        log.debug(f"starting video recording to {self.vrfile}.mp4")
         self.vr = subprocess.Popen(cmd, shell=True, stdout=logfile, stderr=logfile)
 
     def stop(self):
