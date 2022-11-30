@@ -14,12 +14,14 @@ class VideoRecorder:
         self.vr = None
 
     def start(self):
-        vrfile = os.path.join(settings.ARTIFACTS, f"{settings.TRID}-{world.tid}-video.mp4")
-        cmd = f"ffmpeg -video_size {VideoRecorder.screensize} -i $DISPLAY {VideoRecorder.args} {vrfile}"
+        vrfile = os.path.join(settings.ARTIFACTS, f"{settings.TRID}-{world.tid}-video")
+        logfile = open(f"{vrfile}.log", "w")
+        cmd = f"ffmpeg -video_size {VideoRecorder.screensize} -i $DISPLAY {VideoRecorder.args} {vrfile}.mp4"
         if self.vr:
+            log.warning("video recording already running")
             return
         log.debug(f"starting video recording to {vrfile}")
-        self.vr = subprocess.Popen(cmd, shell=True)
+        self.vr = subprocess.Popen(cmd, shell=True, stdout=logfile, stderr=logfile)
 
     def stop(self):
         log.debug(f"stopping video recording for {world.tid}")
@@ -30,7 +32,7 @@ class VideoRecorder:
 
 @before.each_feature
 def start_videorecording(feature):
-    if not settings.VR:
+    if settings.VR == "no":
         log.warning("Videorecording disabled")
         return
     world.vr = VideoRecorder()
