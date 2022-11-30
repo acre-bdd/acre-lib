@@ -8,7 +8,7 @@ from acre import log
 
 class VideoRecorder:
     screensize = "640x480"
-    args = "-y -f x11grab -pix_fmt yuv420p -codec:v libx264 -r 10 -crf 38 -preset ultrafast"
+    args = "-y -pix_fmt yuv420p -codec:v libx264 -r 10 -crf 38 -preset ultrafast"
 
     def __init__(self):
         self.vr = None
