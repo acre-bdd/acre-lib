@@ -14,7 +14,8 @@ class VideoRecorder:
         self.vr = None
 
     def start(self):
-        self.vrfile = os.path.join(settings.ARTIFACTS, f"{settings.TRID}-{world.tid}-video")
+        tid = world.tid.replace(":", "")
+        self.vrfile = os.path.join(settings.ARTIFACTS, f"{settings.TRID}-{tid}-video")
         logfile = open(f"{self.vrfile}.log", "w")
         cmd = f"ffmpeg -video_size {VideoRecorder.screensize} {VideoRecorder.args} {self.vrfile}.mp4"
         log.debug(f"vr: {cmd}")
