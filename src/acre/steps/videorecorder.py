@@ -16,7 +16,7 @@ class VideoRecorder:
     def start(self):
         self.vrfile = os.path.join(settings.ARTIFACTS, f"{settings.TRID}-{world.tid}-video")
         logfile = open(f"{self.vrfile}.log", "w")
-        cmd = f"ffmpeg -video_size {VideoRecorder.screensize} -i $DISPLAY {VideoRecorder.args} {self.vrfile}.mp4"
+        cmd = f"ffmpeg -video_size {VideoRecorder.screensize} {VideoRecorder.args} {self.vrfile}.mp4"
         log.debug(f"vr: {cmd}")
         if self.vr:
             log.warning("video recording already running")
