@@ -7,7 +7,8 @@ from acre import log
 
 
 class VideoRecorder:
-    screensize = "640x480"
+    screensize = "1280x1024"
+    scaling = "-video_size {VideoRecorder.screensize} -vf scale=640:480,setsar=1:1" 
     args = "-y -f x11grab -i $DISPLAY -pix_fmt yuv420p -codec:v libx264 -r 10 -crf 38 -preset ultrafast"
 
     def __init__(self):
@@ -17,7 +18,8 @@ class VideoRecorder:
         tid = world.tid.replace(":", "")
         self.vrfile = os.path.join(settings.ARTIFACTS, f"{settings.TRID}-{tid}-video")
         logfile = open(f"{self.vrfile}.log", "w")
-        cmd = f"ffmpeg -video_size {VideoRecorder.screensize} {VideoRecorder.args} {self.vrfile}.mp4"
+
+        cmd = f"ffmpeg {VideoRecorder.args} {VideoRecorder.scaling} {self.vrfile}.mp4"
         log.debug(f"vr: {cmd}")
         if self.vr:
             log.warning("video recording already running")
@@ -49,7 +51,7 @@ def start_videorecording(feature):
 
 @after.each_feature
 def stop_videorecording(feature):
-    if not settings.VR:
+    if settings.VR == "no":
         log.debug("Videorecording disabled")
         return
     world.vr.stop()
