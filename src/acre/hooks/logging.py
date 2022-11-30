@@ -3,7 +3,7 @@ import logging
 from acre import log
 
 from radish import before, after, world
-from radish.tools import tid
+from acre.tools import tid
 
 levelmap = {
     'debug': logging.DEBUG,
