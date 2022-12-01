@@ -20,7 +20,6 @@ logfile = None
 def setup_logging(features, marker):
     global trid
     global logfile
-    logging.basicConfig()
     level = 'info'
     if userdata.loglevel:
         level = userdata.loglevel.lower()
@@ -43,22 +42,22 @@ def setup_logging(features, marker):
 @before.each_feature
 def before_feature(feature):
     world.tid = tid.tid_from_tags(feature.tags)
-    log.info(f"started: {feature} [{world.tid}]")
+    log.debug(f"started: {feature} [{world.tid}]")
 
 
 @after.each_feature
 def after_feature(feature):
-    log.info(f"{feature.state}: {feature}")
+    log.debug(f"{feature.state}: {feature}")
 
 
 @before.each_scenario
 def before_scenario(scenario):
-    log.info(f"started: Scenario: {scenario.sentence}")
+    log.debug(f"started: Scenario: {scenario.sentence}")
 
 
 @after.each_feature
 def after_scenario(scenario):
-    log.info(f"{scenario.state}: Scenario: {scenario.sentence}")
+    log.debug(f"{scenario.state}: Scenario: {scenario.sentence}")
 
 
 @before.each_step

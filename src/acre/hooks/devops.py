@@ -24,14 +24,13 @@ def after_all(features, marker):
         for scenario in feature.scenarios:
             stid = tid.tid_from_tags(scenario.tags)
             rtid = _make_tid(ftid, stid)
-            title = f"{tid}{scenario.sentence}"
-            log.warning(f"Setting title to {title}")
+            title = f"{rtid}{scenario.sentence}"
             ids = api.WorkItems.find({"System.Title": f"~{rtid}"})
             if len(ids) > 0:
                 tc = api.TestCase.get(ids[0])
-                log.warning(f"Setting title to {title}")
                 tc.Title = title
             else:
+                log.warning(f"area is: {settings.DEVOPS_AREA}")
                 tc = api.TestCase.create(title=title, area=settings.DEVOPS_AREA)
             tc.Description = "<br>".join(feature.description)
             tc.steps = [Step(_boldify(rs.sentence)) for rs in scenario.steps]
