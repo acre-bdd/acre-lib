@@ -27,16 +27,18 @@ def setup_logging(features, marker):
     if level.lower() not in levelmap:
         log.warning(f"Unknown log level '{level}', ignoring")
     else:
-        log.setLevel(levelmap[level])
+        log.console.setLevel(levelmap[level])
         log.debug(f"log level set to: {level}")
 
     artifacts = settings.ARTIFACTS
     trid = settings.TRID
-    log.warning(f"{artifacts}/{trid}")
     logfile = os.path.join(artifacts, f"{trid}.log")
     logfh = logging.FileHandler(os.path.join(artifacts, f"{trid}.log"))
-    log.addHandler(logfh)
-    log.info(f"testrun {marker} {trid} started")
+    logfh.setFormatter(logging.Formatter("%(asctime)s|%(levelname)s|%(message)s"))
+    logfh.setLevel(log.DEBUG)
+    logging.getLogger().addHandler(logfh)
+    log.warning(f"{artifacts}/{trid}")
+    log.trace(f"testrun {marker} {trid} started")
 
 
 @before.each_feature
@@ -73,5 +75,5 @@ def after_step(step):
 @after.all
 def finish_logging(features, marker):
     global logfile
-    log.info(f"testrun {marker} {trid} finished")
-    log.info(f"logs written to: {logfile}")
+    log.trace(f"testrun {marker} {trid} finished")
+    log.highlight(f"logs written to: {logfile}")

@@ -43,7 +43,7 @@ class VideoRecorder:
         if self.vr.returncode != 255:
             log.warning(f"videorecording terminated with error {self.vr.returncode}, check logfile:")
             log.warning(f"{self.vrfile}.log")
-        log.info(f"vr finished, video: {self.vrfile}.mp4")
+        log.highlight(f"vr finished, video: {self.vrfile}.mp4")
         self.vr = None
 
 

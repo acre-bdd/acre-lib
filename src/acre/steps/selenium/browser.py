@@ -2,8 +2,9 @@
 from selenium import webdriver
 
 from radish import given, then, when, step
-
 from radish import world
+
+from acre import log
 
 
 @given("I start the browser")
@@ -19,11 +20,11 @@ def i_close_the_browser(step):
 
 @when("I navigate to '{url}'")
 def i_navigate_to(step, url):
-    print(f"opening url '{url}'")
+    log.debug(f"opening url '{url}'")
     world.webdriver.get(url)
 
 
 @then("I see '{title}' in the page title")
 def i_see_the_title(step, title):
-    print(f"checking title {title}")
+    log.debug(f"checking title {title}")
     world.asserts.contains(title, world.webdriver.title)
