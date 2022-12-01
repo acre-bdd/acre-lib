@@ -1,6 +1,6 @@
 import os
 import logging
-from acre import log
+from acre import log, userdata, settings
 
 from radish import before, after, world
 from acre.tools import tid
@@ -13,15 +13,17 @@ levelmap = {
 }
 
 trid = None
+logfile = None
 
 
 @before.all(order=1)
 def setup_logging(features, marker):
     global trid
+    global logfile
     logging.basicConfig()
     level = 'info'
-    if 'loglevel' in world.config.user_data:
-        level = world.config.user_data['loglevel'].lower()
+    if userdata.loglevel:
+        level = userdata.loglevel.lower()
 
     if level.lower() not in levelmap:
         log.warning(f"Unknown log level '{level}', ignoring")
@@ -29,10 +31,12 @@ def setup_logging(features, marker):
         log.setLevel(levelmap[level])
         log.debug(f"log level set to: {level}")
 
-    artifacts = world.config.user_data['ARTIFACTS']
-    trid = world.config.user_data['TRID']
-    logfile = logging.FileHandler(os.path.join(artifacts, f"{trid}.log"))
-    log.addHandler(logfile)
+    artifacts = settings.ARTIFACTS
+    trid = settings.TRID
+    log.warning(f"{artifacts}/{trid}")
+    logfile = os.path.join(artifacts, f"{trid}.log")
+    logfh = logging.FileHandler(os.path.join(artifacts, f"{trid}.log"))
+    log.addHandler(logfh)
     log.info(f"testrun {marker} {trid} started")
 
 
@@ -69,4 +73,6 @@ def after_step(step):
 
 @after.all
 def finish_logging(features, marker):
+    global logfile
     log.info(f"testrun {marker} {trid} finished")
+    log.info(f"logs written to: {logfile}")

@@ -1,12 +1,14 @@
-from radish import world
+import os
 
 
 class Settings:
-    def __getattr__(self, name):
+    def get(self, name, default=None):
+        val = self.__getattr__(name)
+        return val if val else default
 
-        if name not in world.config.user_data:
-            return None
-        return world.config.user_data[name]
+    def __getattr__(self, name):
+        if name in os.environ:
+            return os.environ[name]
 
 
 settings = Settings()

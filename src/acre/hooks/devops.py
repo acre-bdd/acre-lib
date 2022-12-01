@@ -66,6 +66,6 @@ def _validate_settings():
 
     for (name, value) in required_settings.items():
         if not value:
-            log.warning(f"setting DEVOPS_{name.upper()} not valid")
+            log.warning(f"setting DEVOPS_{name.upper()} not set")
             return False
     return True
