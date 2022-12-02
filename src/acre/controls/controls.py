@@ -1,4 +1,5 @@
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
 
 from radish import world
@@ -9,9 +10,11 @@ class Control():
     def __init__(self, xpath=None):
         self.xpath = xpath
 
-    def input(self, text):
+    def input(self, text, enter=False):
         self.locate()
         self.match.send_keys(text)
+        if enter:
+            self.match.send_keys(Keys.ENTER)
 
     def locate(self, timeout=30):
         self.timeout = timeout

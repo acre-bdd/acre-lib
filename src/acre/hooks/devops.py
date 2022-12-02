@@ -20,9 +20,9 @@ def after_all(features, marker):
         return
 
     for feature in features:
-        ftid = tid.tid_from_tags(feature.tags)
+        ftid = tid.tid_from_tags(feature)
         for scenario in feature.scenarios:
-            stid = tid.tid_from_tags(scenario.tags)
+            stid = tid.tid_from_tags(scenario)
             rtid = _make_tid(ftid, stid)
             title = f"{rtid}{scenario.sentence}"
             ids = api.WorkItems.find({"System.Title": f"~{rtid}"})

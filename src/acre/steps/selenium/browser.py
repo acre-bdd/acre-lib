@@ -18,13 +18,13 @@ def i_close_the_browser(step):
     world.webdriver.close()
 
 
-@when("I navigate to '{url}'")
+@when('I navigate to "{url}"')
 def i_navigate_to(step, url):
     log.debug(f"opening url '{url}'")
     world.webdriver.get(url)
 
 
-@then("I see '{title}' in the page title")
+@then('I see "{title}" in the page title')
 def i_see_the_title(step, title):
     log.debug(f"checking title {title}")
     world.asserts.contains(title, world.webdriver.title)

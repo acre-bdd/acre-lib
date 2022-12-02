@@ -1,7 +1,6 @@
 
-def tid_from_tags(tags):
-    for tag in tags:
+def tid_from_tags(feature):
+    for tag in feature.tags:
         if tag.name.startswith("tid:"):
             return tag.name
-
-    return None
+    return feature.id

@@ -17,7 +17,8 @@ class VideoRecorder:
         self.vr = None
 
     def start(self):
-        tid = world.tid.replace(":", "")
+        # tid = world.tid.replace(":", "")
+        tid = world.tid
         self.vrfile = os.path.join(settings.ARTIFACTS, f"{settings.TRID}-{tid}-video")
         logfile = open(f"{self.vrfile}.log", "w")
 
