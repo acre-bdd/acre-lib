@@ -43,9 +43,9 @@ def i_see_the_tag_selector(step, tag, field):
     i_see_the_tag(step, tag, field)
 
 
-@then('I see the {tag:Word} {field:QuotedString}')
-def i_see_the_tag_with_text(step, tag, field):
-    i_see_the_tag(step, tag=tag, field=field)
+@then('I see the {tag:Word} {text:QuotedString}')
+def i_see_the_tag_with_text(step, tag, text):
+    i_see_the_tag(step, tag=tag, text=text)
 
 
 @then('I see the {tag:Word} {selector:Selector} {text:QuotedString}')
@@ -59,8 +59,9 @@ def i_see_the_selctor_text(step, selector, text):
 
 
 def i_see_the_tag(step, tag=None, field=None, text=None):
+    kwargs = {}
     if field:
-        kwargs = _get_kwargs(field)
+        kwargs.update(_get_kwargs(field))
     if tag:
         kwargs['tag'] = _get_tag(tag)
     if text:
