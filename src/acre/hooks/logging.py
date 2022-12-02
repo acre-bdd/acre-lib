@@ -74,7 +74,7 @@ def before_scenario(scenario):
 @after.each_scenario
 def after_scenario(scenario):
     log.debug(f"    SCENARIO {scenario.state}: {scenario.sentence}")
-    logmon.info(colored(f"    SCENARIO {scenario.state}: {scenario.sentence}", "white", attrs=['bold']))
+    logmon.info("")
 
 
 @before.each_step
@@ -89,6 +89,10 @@ def before_step(step):
 def after_step(step):
     log.debug(f"        STEP {step.state}:  {step.sentence}")
     color = "green" if "passed" in step.state else "red"
+    if "passed" not in step.state:
+        logmon.info(colored(f"        {step.failure.reason}", "red"))
+        log.debug(step.failure.reason)
+        log.debug(step.failure.traceback)
     logmon.info(colored(f"        {step.sentence}", color))
 
 
