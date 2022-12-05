@@ -1,24 +1,36 @@
 import os
 import pylogx
-from logging import FileHandler, Formatter
+from pylogx import Level, log, ColorFormatter
+from logging import FileHandler, Formatter, getLevelName, getLogger
 
-from .tools import settings
+from .tools.settings import settings
 
-pylogx.enable_colors()
-log = pylogx.log.getChild("acre")
+indent = pylogx.Indent()
+pylogx.levels[Level.DEBUG]['attrs'] = ['bold']
 
-logfh = FileHandler(os.path.join(settings.ARTIFCACTS, f"{settings.TRID}.log"))
-logfh.setFormatter(Formatter("%(asctime)s|%(levelname)s|%(message)s"))
-logfh.setLevel(log.DEBUG)
+level = getLevelName(settings.get('LOG_LEVEL', 'NOTE'))
 
-logmon = log.getChild("logmon")
-logmonfh = FileHandler("/tmp/monitor.log")
-logmonfh.setLevel(log.NOTE)
-logmonfh.setFormatter(Formatter("%(asctime)s %(indent)s%(message)s"))
-logmon.addHandler(logmonfh)
+console = pylogx.enable_colors(level=level, fmt="%(indent)s%(message)s", ups=[Level.NOTE])
 
-log.addHandler(logfh)
+logfile = os.path.join(settings.ARTIFACTS, f"{settings.TRID}.log")
+logfh = FileHandler(logfile)
+logfh.setFormatter(Formatter("{asctime} | {levelname:8} |{indent}{message}", style="{"))
+logfh.setLevel(Level.DEBUG)
 
-indent = pylogx.IndentFilter()
-pylogx.log.addFilter(indent)
-pylogx.log.setLevel(pylogx.Level.DEBUG)
+cf = ColorFormatter(fmt="%(asctime)s %(indent)s%(message)s")
+logmon = FileHandler("/tmp/monitor.log")
+logmon.setLevel(level)
+logmon.setFormatter(cf)
+
+monitor = log.getChild("monitor")
+monitor.addHandler(logfh)
+monitor.setLevel(Level.DEBUG)
+monitor.propagate = False
+monitor.addHandler(logmon)
+
+getLogger().addHandler(logfh)
+getLogger().addHandler(logmon)
+getLogger().addHandler(console)
+# getLogger().setLevel(Level.DEBUG)
+
+log.debug(f"log level set to: {level}")

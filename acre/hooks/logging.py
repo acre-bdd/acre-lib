@@ -1,93 +1,64 @@
 import time
-import os
-import logging
-from termcolor import colored
-from acre import log, userdata, settings
+from acre import log, monitor, Level, userdata, settings, logfile, indent
 
 from radish import before, after, world
 from acre.tools import tid
 
-levelmap = {
-    'debug': logging.DEBUG,
-    'info': logging.INFO,
-    'warning': logging.WARNING,
-    'critical': logging.CRITICAL
-}
-
-trid = None
-logfile = None
-logmon = None
-
 
 @before.all(order=1)
 def setup_logging(features, marker):
-    global trid
-    global logfile
-    global logmon
-    level = 'info'
-    if userdata.loglevel:
-        level = userdata.loglevel.lower()
-
-    if level.lower() not in levelmap:
-        log.warning(f"Unknown log level '{level}', ignoring")
-    else:
-        log.console.setLevel(levelmap[level])
-        log.debug(f"log level set to: {level}")
-
-    artifacts = settings.ARTIFACTS
-    trid = settings.TRID
-    log.warning(f"{artifacts}/{trid}")
-    log.trace(f"TESTRUN {marker}|{trid}")
-    logmon.info(colored(f"TESTRUN {marker}|{trid}", "magenta"))
+    indent.inc()
+    log.hint(f"TESTRUN {marker}|{settings.TRID}")
 
 
 @before.each_feature
 def before_feature(feature):
     world.tid = tid.tid_from_tags(feature)
-    log.debug(f"FEATURE: {feature} [{world.tid}]")
-    logmon.info(colored(f"FEATURE: {feature} [{world.tid}]", "white", attrs=['bold']))
+    monitor.hint(f"FEATURE: {feature} [{world.tid}]")
+    indent.inc()
 
 
 @after.each_feature
 def after_feature(feature):
-    log.debug(f"FEATURE: {feature.state}|{feature}")
-    logmon.info(colored(f"FEATURE: {feature.state}|{feature}", "white", attrs=['bold']))
+    indent.dec()
 
 
 @before.each_scenario
 def before_scenario(scenario):
-    log.debug(f"    SCENARIO: {scenario.sentence}")
-    logmon.info(colored(f"    SCENARIO: {scenario.sentence}", "white", attrs=['bold']))
+    monitor.hint(f"Scenario: {scenario.sentence}")
+    indent.inc()
 
 
 @after.each_scenario
 def after_scenario(scenario):
-    log.debug(f"    SCENARIO {scenario.state}: {scenario.sentence}")
-    logmon.info("")
+    indent.dec()
+    # monitor.log(_levelByState(scenario.state), f"Scenario: {scenario.sentence}")
 
 
 @before.each_step
 def before_step(step):
     if userdata.delay:
         time.sleep(int(userdata.delay))
-    log.debug(f"        STEP: {step.sentence}")
-    logmon.info(colored(f"        {step.sentence}", "yellow"))
+    monitor.pending(step.sentence)
+    indent.inc()
 
 
 @after.each_step
 def after_step(step):
-    log.debug(f"        STEP {step.state}:  {step.sentence}")
-    color = "green" if "passed" in step.state else "red"
+    indent.dec()
+    monitor.log(_levelByState(step.state), step.sentence)
     if "passed" not in step.state:
-        logmon.info(colored(f"        {step.failure.reason}", "red"))
-        log.debug(step.failure.reason)
-        log.debug(step.failure.traceback)
-    logmon.info(colored(f"        {step.sentence}", color))
+        monitor.error(step.failure.reason)
+        monitor.error(step.failure.traceback)
 
 
 @after.all
 def finish_logging(features, marker):
-    global logfile
-    log.trace(f"TESTRUN|finished|{marker}|{trid}")
-    logmon.info(f"TESTRUN|finished|{marker}|{trid}")
-    log.highlight(f"logs written to: {logfile}")
+    log.trace(f"TESTRUN|finished|{marker}|{settings.TRID}")
+    log.trace(f"logs written to: {logfile}")
+    log.trace(f"check artifacts: {settings.ARTIFACTS}")
+    indent.dec()
+
+
+def _levelByState(state):
+    return Level.SUCCESS if "passed" in state else Level.ERROR

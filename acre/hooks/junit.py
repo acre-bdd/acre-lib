@@ -1,7 +1,7 @@
 import os
 from junit_xml import TestCase, TestSuite
 
-from acre.hooks import logging
+from acre import settings
 
 from radish import after, world
 
@@ -19,8 +19,8 @@ def after_all(features, marker):
             if scenario.failed_step:
                 tc.add_failure_info(scenario.failed_step.failure.reason, output=scenario.failed_step.failure.traceback)
         testcases.append(tc)
-    ts = TestSuite(name=marker, id=logging.trid, test_cases=testcases)
-    outfile = os.path.join(world.config.user_data['ARTIFACTS'], f"{logging.trid}-junit.xml")
+    ts = TestSuite(name=marker, test_cases=testcases)
+    outfile = os.path.join(world.config.user_data['ARTIFACTS'], f"{settings.TRID}-junit.xml")
     fp = open(outfile, "w")
     fp.write(TestSuite.to_xml_string([ts]))
     fp.close()
