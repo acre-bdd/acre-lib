@@ -36,17 +36,6 @@ def setup_logging(features, marker):
 
     artifacts = settings.ARTIFACTS
     trid = settings.TRID
-    logfile = os.path.join(artifacts, f"{trid}.log")
-    logfh = logging.FileHandler(os.path.join(artifacts, f"{trid}.log"))
-    logfh.setFormatter(logging.Formatter("%(asctime)s|%(levelname)s|%(message)s"))
-    logfh.setLevel(log.DEBUG)
-    logmon = logging.getLogger().getChild("logmon")
-    logmon.propagate = False
-    logmonh = logging.FileHandler(os.path.join(artifacts, "/tmp/monitor2.log"))
-    logmonh.setLevel(log.INFO)
-    logmonh.setFormatter(logging.Formatter("%(asctime)s %(message)s"))
-    logmon.addHandler(logmonh)
-    logging.getLogger().addHandler(logfh)
     log.warning(f"{artifacts}/{trid}")
     log.trace(f"TESTRUN {marker}|{trid}")
     logmon.info(colored(f"TESTRUN {marker}|{trid}", "magenta"))
