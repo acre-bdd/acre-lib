@@ -9,6 +9,7 @@ class Settings:
     def __getattr__(self, name):
         if name in os.environ:
             return os.environ[name]
+        return None
 
 
 settings = Settings()

@@ -2,7 +2,7 @@ from radish import given, when, then, custom_type
 
 from acre import log
 from acre.controls import SmartControl, Input
-from acre.steps import StepError
+from acre.steps.errors import StepError
 
 
 @custom_type('Selector', r'[#@][\w_-]+')

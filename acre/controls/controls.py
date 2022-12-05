@@ -3,7 +3,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
 
 from radish import world
-from acre import log
+from acre import log, settings
 
 
 class Control():
@@ -16,8 +16,8 @@ class Control():
         if enter:
             self.match.send_keys(Keys.ENTER)
 
-    def locate(self, timeout=30):
-        self.timeout = timeout
+    def locate(self, timeout=None):
+        self.timeout = timeout if timeout else int(settings.get('TIMEOUT', 5))
         log.debug(f"locating: {self.xpath}")
         self.match = world.webdriver.find_element(By.XPATH, self.xpath)
         return self
