@@ -14,7 +14,7 @@ console = pylogx.enable_colors(level=level, fmt="%(indent)s%(message)s", ups=[Le
 
 logfile = os.path.join(settings.ARTIFACTS, f"{settings.TRID}.log")
 logfh = FileHandler(logfile)
-logfh.setFormatter(Formatter("{asctime} | {levelname:8} |{indent}{message}", style="{"))
+logfh.setFormatter(Formatter("{asctime} | {levelname:8} | {indent}{message}", style="{"))
 logfh.setLevel(Level.DEBUG)
 
 cf = ColorFormatter(fmt="%(asctime)s %(indent)s%(message)s")
