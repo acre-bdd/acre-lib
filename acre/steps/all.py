@@ -4,5 +4,5 @@ from .errors import StepError
 
 from . import basic
 from . import videorecorder
-from .selenium import basic, browser
+from .playwright import basic, browser
 from . import settings
