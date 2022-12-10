@@ -5,7 +5,7 @@ from acre.playwright import TimeoutError
 
 
 class SmartLocator:
-    def __init__(self, name):
+    def __init__(self, name=None):
         self.name = name
 
     def locator(self):
