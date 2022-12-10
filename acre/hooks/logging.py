@@ -11,7 +11,7 @@ def setup_logging(features, marker):
     log.hint(f"TESTRUN {marker}|{settings.TRID}")
 
 
-@before.each_feature
+@before.each_feature(order=1)
 def before_feature(feature):
     world.tid = tid.tid_from_tags(feature)
     monitor.hint(f"FEATURE: {feature} [{world.tid}]")

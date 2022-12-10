@@ -19,6 +19,8 @@ def i_close_the_browser(step):
 
 @when('I navigate to "{url}"')
 def i_navigate_to(step, url):
+    if not world.browser:
+        i_start_the_browser(step)
     if not world.page:
         world.page = world.browser.new_page()
     log.note(f"opening url '{url}'")

@@ -9,6 +9,8 @@ from acre import log
 def setup_playwright(features, marker):
     log.warning("initialising playwright")
     world.playwright = sync_playwright().start()
+    world.browser = None
+    world.page = None
 
 
 @after.all(order=5)
