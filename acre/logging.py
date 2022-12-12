@@ -10,7 +10,8 @@ pylogx.levels[Level.DEBUG]['attrs'] = ['bold']
 
 level = getLevelName(settings.get('LOG_LEVEL', 'NOTE'))
 
-console = pylogx.enable_colors(level=level, fmt="%(indent)s%(message)s", ups=[Level.NOTE])
+ups = [] if level == Level.DEBUG else [Level.NOTE]
+console = pylogx.enable_colors(level=level, fmt="%(indent)s%(message)s", ups=ups)
 
 logfile = os.path.join(settings.ARTIFACTS, f"{settings.TRID}.log")
 logfh = FileHandler(logfile)
