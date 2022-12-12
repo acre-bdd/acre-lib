@@ -2,12 +2,13 @@
 from radish import given, then, when, step
 from radish import world
 
-from acre import log
+from acre import log, settings
 
 
 @given("I start the browser")
 def i_start_the_browser(step):
     world.browser = world.playwright.chromium.launch(headless=False)
+    world.context = world.browser.new_context(record_video_dir=settings.ARTIFACTS)
     world.page = None
 
 
@@ -22,7 +23,7 @@ def i_navigate_to(step, url):
     if not world.browser:
         i_start_the_browser(step)
     if not world.page:
-        world.page = world.browser.new_page()
+        world.page = world.context.new_page()
     log.note(f"opening url '{url}'")
     world.page.goto(url)
 
