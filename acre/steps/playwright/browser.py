@@ -7,7 +7,7 @@ from acre import log, settings
 
 @given("I start the browser")
 def i_start_the_browser(step):
-    world.browser = world.playwright.chromium.launch(headless=False)
+    world.browser = world.playwright.chromium.launch(headless=True)
     world.context = world.browser.new_context(record_video_dir=settings.ARTIFACTS)
     world.page = None
 
